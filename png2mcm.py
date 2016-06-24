@@ -17,10 +17,11 @@ def smart_open(filename=None):
             fh.close()
 
 def print_help(name):
-    print '%s -i <inputfile.png> -o <outputfile.mcm> [-a|--ascii] [-x|--xsize] <x size> [-y|--ysize] <y size> [-s|--start] <start> [-p--padding]' % name
+    print '%s -i <inputfile.png> -o <outputfile.mcm> [-a|--ascii] [-x|--xsize] <x size> [-y|--ysize] <y size> [-s|--start] <start> [-t|--transparency] [-b|--brightness]' % name
 
 ascii_print = None
-padding = None
+transparency = 200
+brightness = 20
 inputfile = None
 outputfile = None
 xchars = 0
@@ -28,7 +29,7 @@ ychars = 0
 startat = 0
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:],"pahi:o:x:y:s:",["ifile=","ofile=","ascii","xsize=","ysize=","start","padding"])
+    opts, args = getopt.getopt(sys.argv[1:],"pahi:o:x:y:s:t:b:",["ifile=","ofile=","ascii","xsize=","ysize=","start","transparency=","brightness="])
 except getopt.GetoptError:
     print_help(sys.argv[0])
     sys.exit(2)
@@ -49,8 +50,11 @@ for opt, arg in opts:
         ychars = int(arg)
     elif opt in ("-s", "--start"):
         startat = int(arg)
-    elif opt in ("-p", "--padding"):
-        padding = True
+    elif opt in ("-t", "--transparency"):
+        transparency = int(arg)
+    elif opt in ("-b", "--brightness"):
+        brightness = int(arg)
+
 
 if inputfile is None:
     print_help(sys.argv[0])
@@ -95,11 +99,14 @@ with smart_open(outputfile) as fh:
                     for byte in xrange(3):
                         out = 0
                         for bit in xrange(4):
-                            d = data[bit*4 + byte*16 + y*xsize*4 + char*12*4 + line*xsize*4*18]
-                            if d == 255:
-                                out += 2 << ((3-bit)*2)
-                            if d > 0 and d < 255:
+                            addr = bit*4 + byte*16 + y*xsize*4 + char*12*4 + line*xsize*4*18
+                            d = data[addr:addr+4]
+                            # 2-White,1-transp,0-black
+                            if d[3] < transparency:
                                 out += 1 << ((3-bit)*2)
+                                continue
+                            if max(d[0:3]) - min(d[0:3]) >  brightness:
+                                out += 2 << ((3-bit)*2)
                         print >>fh, format(out, '08b')
                 for pad in xrange(10):
                     print >>fh, "11111111"
