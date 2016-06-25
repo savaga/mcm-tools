@@ -58,11 +58,11 @@ for opt, arg in opts:
     elif opt in ("-o", "--ofile"):
         outputfile = arg
     elif opt in ("-f", "--from"):
-        copy_from = int(arg)
+        copy_from = int(arg, 0)
     elif opt in ("-t", "--to"):
-        copy_to = int(arg)
+        copy_to = int(arg, 0)
     elif opt in ("-c", "--count"):
-        chars_num = int(arg)
+        chars_num = int(arg, 0)
 
 if inputfile is None:
     print_help(sys.argv[0])
