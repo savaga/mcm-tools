@@ -12,9 +12,11 @@ for font in "${fonts[@]}"; do
   # volt
   python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xA9 -t 0x00 -c 1
   # throttle
-  python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xC8 -t 0x01 -c 2
+  python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xC8 -t 0x04 -c 2
   # rssi
-  python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xBA -t 0x03 -c 1
+  python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xBA -t 0x01 -c 1
+  # ahi
+  python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xBC -t 0x27 -c 1
   # copy it into the project
   cp fonts/betaflight/${font}.mcm ~/src/rc/betaflight-configurator/resources/osd/
 done
