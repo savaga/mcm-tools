@@ -15,6 +15,8 @@ for font in "${fonts[@]}"; do
   python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xBA -t 0x01 -c 1
   # volt
   python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xA9 -t 0x06 -c 1
+  # amp
+  python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xA4 -t 0x07 -c 1
   # ahi
   python copy2mcm.py -i fonts/mwosd/${font}.mcm -o fonts/betaflight/${font}.mcm -f 0xBC -t 0x27 -c 1
   # copy it into the project
